@@ -1,10 +1,8 @@
 name: Deploy
-
 on:
   workflow_dispatch: {}
   push:
     branches: [main]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -12,14 +10,14 @@ jobs:
       contents: read
       deployments: write
       id-token: write
-      packages: read
+      pages: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'yarn'
-      - run: yarn --frozen-lockfile
+          cache: 'npm'
+      - run: npm ci
       - id: date
         run: echo "date=$(TZ=America/Los_Angeles date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
       - id: cache-data
@@ -27,8 +25,9 @@ jobs:
         with:
           path: docs/.observablehq/cache
           key: data-${{ hashFiles('docs/data/*') }}-${{ steps.date.outputs.date }}
-      - run: yarn build
-      - run: yarn docs:build
-      - run: yarn docs:deploy
-        env:
-          OBSERVABLE_TOKEN: ${{ secrets.OBSERVABLE_API_TOKEN }}
+      - run: npm run build
+      - run: npm run docs:build
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/dist
