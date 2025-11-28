@@ -17,7 +17,9 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
+          cache-dependency-path: 'docs/package-lock.json'
       - run: npm ci
+        working-directory: ./docs
       - id: date
         run: echo "date=$(TZ=America/Los_Angeles date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
       - id: cache-data
@@ -26,7 +28,7 @@ jobs:
           path: docs/.observablehq/cache
           key: data-${{ hashFiles('docs/data/*') }}-${{ steps.date.outputs.date }}
       - run: npm run build
-      - run: npm run docs:build
+        working-directory: ./docs
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
