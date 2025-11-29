@@ -31,6 +31,77 @@ By mapping these factors, we identify common characteristics among closed school
 
 ---
 
+### AI-Assisted Development Process
+
+The interactive visualization on the index page was developed with assistance from **GitHub Copilot (Claude Sonnet 4.5)** through an iterative prompt-driven workflow. Below are the major development prompts and requests that shaped the application:
+
+**Initial Setup & Data Integration**
+- Integrate multiple data sources (NCES school locations, demographics, EPA sites, enrollment time series)
+- Write data loader scripts to compile data into csvs (see data/scripts_backup folder for scripts)
+- Create helper functions for distance calculations and data formatting
+
+**Risk Algorithm Development**
+- Design weighted risk scoring algorithm combining:
+  - Enrollment decline trends (>10% decline threshold)
+  - Child population decline in census tracts (>5% decline threshold)
+  - Poverty rate (normalized 15-35% range)
+  - Education attainment (bachelor's degree rates)
+  - Unemployment rates
+- Create configurable weight controls for each risk factor
+
+**Interactive Map Creation**
+- Implement color-coded school dots by risk score (green→yellow→red gradient)
+- Implement zoom functionality with scale-invariant dot sizing with D3 customization
+- Add county labels at geographic centroids with zoom-responsive text sizing
+
+**Summary Panel & Statistics**
+- Create compact summary panel showing filtered school counts
+- Display risk distribution (low/medium/high categories)
+- Calculate enrollment statistics (total students, averages)
+- Show environment & demographics metrics (EPA proximity, public/private counts)
+
+**Detail Panel Implementation**
+- Design slide-out detail panel triggered by school dot clicks
+- Display comprehensive school information including:
+  - Risk score with color-coded background and contributing factors
+  - School profile (type, status, enrollment, grades, locale)
+  - Nearby EPA brownfield sites (within 2-mile radius)
+  - Census tract demographics (income, poverty, unemployment, education)
+  - Time series charts comparing enrollment vs. child population trends
+- Implement enrollment/population trend convergence/divergence analysis
+- Add close button and off-screen hiding behavior
+
+**Filter Controls**
+- School level filter (Elementary, Middle, High, Multi-Level, Other)
+- School type filter (Public, Private)
+- EPA proximity filter (Near sites, Not near sites)
+- Locale filter (12 categories: City/Suburb/Town/Rural × Large/Midsize/Small/Fringe/Distant/Remote)
+- Minimum risk score slider (0-10 range)
+
+**User Interface Enhancements**
+- Add page margins for better layout
+- Create map header with instructional text ("Click on any school dot to view detailed information")
+- Implement algorithm tooltip button showing risk calculation formula
+- Style Observable Inputs with compact, cohesive design
+
+**Visual & Interactive Features**
+- Implement hover tooltips on school dots showing name and risk score
+- Add click event handlers for detail panel population
+- Create smooth panel slide-in/slide-out animations
+- Add county boundary visualization with labels
+- Implement responsive scaling for dots and labels during zoom
+
+**Styling & Polish**
+- Style range sliders with custom thumbs and gradients
+- Style checkboxes with blue accent colors
+- Add hover effects on interactive elements
+- Implement form container styling with borders and backgrounds
+- Create detail panel CSS for tables and sections
+
+This iterative development approach allowed for rapid prototyping and incremental refinement of both functionality and design.
+
+---
+
 ### Key Visualizations
 
 **1. Maine School Closure Map**
@@ -234,4 +305,3 @@ While our pattern analysis identifies key risk factors, it cannot account for:
 When referencing this work, please cite as:
 
 [Rachel Schoenberg, Cody Snow, and Hardik Bisnoi]. (2025). *Maine School Closures: A Predictable Crisis*. Data visualization project for Maine Redevelopment Land Bank Authority. 
-
